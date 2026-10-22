@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mini LeetCode</title>
+<style>
+:root{--bg:#f1f4f6;--panel:#fff;--line:#d5dce3;--text:#1b2430;--muted:#5b6877;--accent:#0f6b6b;--onaccent:#fff;--ok:#1a7f45;--bad:#c0392b;--code:#f8fafb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1419;--panel:#171e26;--line:#2a3441;--text:#e3e8ee;--muted:#8d9aab;--accent:#4fc3b5;--onaccent:#0b1f1c;--ok:#4cc57e;--bad:#ff7a6b;--code:#10161c}}
+:root[data-theme="dark"]{--bg:#0f1419;--panel:#171e26;--line:#2a3441;--text:#e3e8ee;--muted:#8d9aab;--accent:#4fc3b5;--onaccent:#0b1f1c;--ok:#4cc57e;--bad:#ff7a6b;--code:#10161c}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex}
+nav{width:250px;flex:none;border-right:1px solid var(--line);background:var(--panel);overflow:auto;padding:16px 10px}
+nav h2{margin:0 8px 14px;font-size:19px;letter-spacing:-.01em}
+nav small{display:block;margin:0 8px 14px;color:var(--muted)}
+nav button{display:flex;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:6px;color:var(--text);padding:9px 10px;cursor:pointer;font:inherit}
+nav button:hover{background:var(--bg)}nav button.on{background:var(--accent);color:var(--onaccent)}
+nav .tag{font-size:12px;opacity:.8}
+main{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:16px;padding:18px;overflow:hidden}
+section{min-width:0;min-height:0;display:flex;flex-direction:column}
+.desc{overflow:auto}
+h1{margin:0 0 4px;font-size:24px;letter-spacing:-.02em}
+.meta{color:var(--muted);font-size:13px;margin-bottom:12px}
+.ex{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 12px;margin:8px 0;font:13px/1.5 ui-monospace,Consolas,monospace;word-break:break-word}
+.bar{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.bar .sp{flex:1}.bar span{color:var(--muted);font-size:13px}
+button.b{font:inherit;font-weight:600;border-radius:6px;padding:7px 16px;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--text)}
+button.p{background:var(--accent);color:var(--onaccent);border-color:var(--accent)}
+button:disabled{opacity:.6;cursor:wait}
+button:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{flex:1;min-height:220px;width:100%;resize:none;background:var(--code);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:12px;font:14px/1.55 ui-monospace,Consolas,monospace;tab-size:2}
+#out{margin-top:10px;max-height:42%;overflow:auto}
+.v{font-size:18px;font-weight:700;margin:2px 0}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.case{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin:6px 0;font:13px/1.5 ui-monospace,Consolas,monospace;word-break:break-word}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:18px;width:min(560px,92vw)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog label{display:block;margin-top:10px;font-size:13px;color:var(--muted)}
+dialog input,dialog select,dialog textarea,.set select,#cin{font:inherit;background:var(--code);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:7px 9px}
+dialog input,dialog select,dialog textarea{width:100%}
+dialog textarea{min-height:70px;flex:none;resize:vertical;font:13px/1.5 ui-monospace,Consolas,monospace}
+#cin{flex:1;min-width:0;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+.set{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px}
+#perr{color:var(--bad);margin-top:8px;min-height:1.2em}
+@media(max-width:820px){body{flex-direction:column;height:auto;min-height:100%}nav{width:auto;border-right:0;border-bottom:1px solid var(--line);max-height:200px}main{grid-template-columns:minmax(0,1fr);overflow:visible}textarea{min-height:260px}#out{max-height:none}}
+</style>
+</head>
+<body>
+<nav>
+  <h2>Mini LeetCode</h2>
+  <small>Write JavaScript, run it against test cases, and see your verdict.</small>
+  <div id="list"></div>
+  <button id="newp" style="color:var(--accent);font-weight:600">+ New problem</button>
+  <details style="margin:14px 8px 0"><summary style="cursor:pointer;color:var(--muted)">Settings</summary>
+    <label class="set">Theme<select id="theme"><option value="auto">Auto</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+    <label class="set">Font size<select id="fs"><option value="13">13</option><option value="14">14</option><option value="16">16</option><option value="18">18</option><option value="20">20</option></select></label>
+    <label class="set">Time limit<select id="tl"><option value="1">1 s</option><option value="3">3 s</option><option value="5">5 s</option><option value="10">10 s</option></select></label>
+  </details>
+</nav>
+<main>
+  <section class="desc">
+    <h1 id="title"></h1>
+    <div class="meta" id="meta"></div>
+    <div class="bar" id="owner"></div>
+    <p id="desc"></p>
+    <div id="examples"></div>
+  </section>
+  <section>
+    <div class="bar">
+      <span>JavaScript</span><div class="sp"></div>
+      <button class="b" id="reset">Reset code</button>
+      <button class="b" id="run">Run</button>
+      <button class="b p" id="submit">Submit</button>
+    </div>
+    <textarea id="code" spellcheck="false" aria-label="Code editor"></textarea>
+    <div class="bar" style="margin:8px 0 0"><span>Try your own values: write the arguments as a JSON list</span></div>
+    <div class="bar"><input id="cin" aria-label="Custom input"><button class="b" id="try">Try</button></div>
+    <div id="out" aria-live="polite"></div>
+  </section>
+</main>
+<dialog id="dlg">
+  <h2 style="margin:0">Problem editor</h2>
+  <label>Title<input id="ptitle"></label>
+  <label>Difficulty<select id="pdiff"><option>Easy</option><option>Medium</option><option>Hard</option></select></label>
+  <label>Function name<input id="pfn" placeholder="sumList"></label>
+  <label>Description<textarea id="pdesc"></textarea></label>
+  <label>Starter code<textarea id="pstart"></textarea></label>
+  <label>Test cases as JSON. Each test is [[arguments], expected], and a third value of 1 hides it.<textarea id="ptests" placeholder="[[[[1,2,3]],6],[[[4,5]],9,1]]"></textarea></label>
+  <div id="perr"></div>
+  <div class="bar" style="justify-content:flex-end"><button class="b" id="pcancel">Cancel</button><button class="b p" id="psave">Save problem</button></div>
+</dialog>
+<script>
+const PROBLEMS = [
+ {id:"two-sum",title:"Two Sum",diff:"Easy",fn:"twoSum",
+  desc:"Given an array of integers nums and an integer target, return the indices of the two numbers that add up to target, in ascending order. Exactly one solution exists.",
+  starter:"function twoSum(nums, target) {\n  \n}",
+  tests:[[[[2,7,11,15],9],[0,1]],[[[3,2,4],6],[1,2]],[[[3,3],6],[0,1]],[[[-1,-2,-3,-4,-5],-8],[2,4],1]]},
+ {id:"valid-palindrome",title:"Valid Palindrome",diff:"Easy",fn:"isPalindrome",
+  desc:"Return true if the string reads the same forwards and backwards after lowercasing it and removing every non-alphanumeric character.",
+  starter:"function isPalindrome(s) {\n  \n}",
+  tests:[[["A man, a plan, a canal: Panama"],true],[["race a car"],false],[[" "],true],[["0P"],false,1]]},
+ {id:"valid-parentheses",title:"Valid Parentheses",diff:"Easy",fn:"isValid",
+  desc:"Given a string containing only the characters ()[]{}, return true if every bracket is closed by the same type and in the correct order.",
+  starter:"function isValid(s) {\n  \n}",
+  tests:[[["()"],true],[["()[]{}"],true],[["(]"],false],[["([)]"],false,1],[["{[]}"],true,1]]},
+ {id:"max-subarray",title:"Maximum Subarray",diff:"Medium",fn:"maxSubArray",
+  desc:"Given an integer array nums, find the contiguous subarray with the largest sum and return that sum. Aim for O(n).",
+  starter:"function maxSubArray(nums) {\n  \n}",
+  tests:[[[[-2,1,-3,4,-1,2,1,-5,4]],6],[[[1]],1],[[[5,4,-1,7,8]],23],[[[-3,-1,-2]],-1,1]]}
+];
+
+// Runs user code against tests. Self-contained so it can be sent to a Web Worker.
+function judge(code, fn, tests) {
+  let f;
+  try { f = new Function(code + "\n;return typeof " + fn + "==='function'?" + fn + ":undefined")(); }
+  catch (e) { return { error: "Compile error: " + e }; }
+  if (!f) return { error: "Define a function named " + fn + "." };
+  return { results: tests.map(function (t) {
+    try {
+      var o = f.apply(null, JSON.parse(JSON.stringify(t.input)));
+      return { pass: JSON.stringify(o) === JSON.stringify(t.expected), got: o === undefined ? null : o };
+    } catch (e) { return { pass: false, error: String(e) }; }
+  }) };
+}
+const WORKER_SRC = judge.toString() + ";onmessage=function(e){var d=e.data;postMessage(judge(d.code,d.fn,d.tests))}";
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const show = (v) => esc(JSON.stringify(v));
+const drafts = {};
+let cur, solved = [];
+try { solved = JSON.parse(localStorage.getItem("ml-solved") || "[]"); } catch (e) {}
+const saveSolved = () => { try { localStorage.setItem("ml-solved", JSON.stringify(solved)); } catch (e) {} };
+
+// Custom problems and settings (kept in this browser)
+let custom = [];
+try { custom = JSON.parse(localStorage.getItem("ml-custom") || "[]"); } catch (e) {}
+const saveCustom = () => { try { localStorage.setItem("ml-custom", JSON.stringify(custom)); } catch (e) {} };
+const all = () => PROBLEMS.concat(custom);
+const settings = { theme: "auto", fs: 14, tl: 3 };
+try { Object.assign(settings, JSON.parse(localStorage.getItem("ml-settings") || "{}")); } catch (e) {}
+function applySettings() {
+  const r = document.documentElement;
+  if (settings.theme === "auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme", settings.theme);
+  $("code").style.fontSize = settings.fs + "px";
+  try { localStorage.setItem("ml-settings", JSON.stringify(settings)); } catch (e) {}
+}
+["theme", "fs", "tl"].forEach((k) => {
+  $(k).value = settings[k];
+  $(k).onchange = () => { settings[k] = k === "theme" ? $(k).value : +$(k).value; applySettings(); };
+});
+
+let editing = null;
+function openDlg(p) {
+  editing = p || null;
+  $("ptitle").value = p ? p.title : ""; $("pdiff").value = p ? p.diff : "Easy"; $("pfn").value = p ? p.fn : "";
+  $("pdesc").value = p ? p.desc : ""; $("pstart").value = p ? p.starter : "function sumList(nums) {\n  \n}";
+  $("ptests").value = p ? JSON.stringify(p.tests) : ""; $("perr").textContent = ""; $("dlg").showModal();
+}
+$("newp").onclick = () => openDlg();
+$("pcancel").onclick = () => $("dlg").close();
+$("psave").onclick = () => {
+  let tests;
+  try { tests = JSON.parse($("ptests").value); } catch (e) { $("perr").textContent = "Test cases must be valid JSON."; return; }
+  const fn = $("pfn").value.trim(), title = $("ptitle").value.trim();
+  if (!title || !/^[A-Za-z_$][\w$]*$/.test(fn)) { $("perr").textContent = "Add a title and a valid function name."; return; }
+  if (!Array.isArray(tests) || !tests.length || !tests.every((t) => Array.isArray(t) && Array.isArray(t[0]) && t.length >= 2)) { $("perr").textContent = "Each test must look like [[arg1, arg2], expected]."; return; }
+  const p = { id: editing ? editing.id : "c-" + Date.now(), custom: true, title, diff: $("pdiff").value, fn, desc: $("pdesc").value, starter: $("pstart").value, tests };
+  if (editing) custom[custom.findIndex((x) => x.id === editing.id)] = p; else custom.push(p);
+  saveCustom(); delete drafts[p.id]; $("dlg").close(); cur = null; load(p.id);
+};
+$("reset").onclick = () => { $("code").value = cur.starter; delete drafts[cur.id]; };
+$("try").onclick = async () => {
+  let input;
+  try { input = JSON.parse($("cin").value); if (!Array.isArray(input)) throw 0; }
+  catch (e) { $("out").innerHTML = "<div class='v bad'>Invalid input</div><div>Write the arguments as a JSON list, for example [[2,7,11,15], 9].</div>"; return; }
+  $("out").textContent = "Running…";
+  const r = await execute($("code").value, cur.fn, [{ input, expected: null }]);
+  $("out").innerHTML = r.timeout ? "<div class='v bad'>Time Limit Exceeded</div>" : r.error ? "<div class='v bad'>Runtime Error</div><div class='case'>" + esc(r.error) + "</div>"
+    : "<div class='v'>Output</div><div class='case'>Input: " + show(input) + "<br>Output: " + (r.results[0].error ? esc(r.results[0].error) : show(r.results[0].got)) + "</div>";
+};
+
+function renderList() {
+  $("list").innerHTML = "";
+  all().forEach((p) => {
+    const b = document.createElement("button");
+    b.className = p.id === (cur && cur.id) ? "on" : "";
+    b.innerHTML = "<span>" + (solved.includes(p.id) ? "✓ " : "") + esc(p.title) + "</span><span class='tag'>" + p.diff + "</span>";
+    b.onclick = () => load(p.id);
+    $("list").append(b);
+  });
+}
+function load(id) {
+  if (cur) drafts[cur.id] = $("code").value;
+  cur = all().find((p) => p.id === id);
+  $("title").textContent = cur.title;
+  $("meta").textContent = cur.diff + " · " + cur.tests.length + " test cases (" + cur.tests.filter((t) => t[2]).length + " hidden)";
+  $("desc").textContent = cur.desc;
+  $("examples").innerHTML = cur.tests.filter((t) => !t[2]).slice(0, 2).map((t) =>
+    "<div class='ex'>Input: " + show(t[0]) + "<br>Output: " + show(t[1]) + "</div>").join("");
+  $("code").value = drafts[id] || cur.starter;
+  $("cin").value = JSON.stringify(cur.tests[0][0]);
+  $("owner").innerHTML = "";
+  if (cur.custom) {
+    const e = document.createElement("button"); e.className = "b"; e.textContent = "Edit problem"; e.onclick = () => openDlg(cur);
+    const d = document.createElement("button"); d.className = "b"; d.textContent = "Delete";
+    d.onclick = () => {
+      if (!d.dataset.s) { d.dataset.s = 1; d.textContent = "Click again to delete"; return; }
+      custom = custom.filter((x) => x.id !== cur.id); saveCustom(); cur = null; load(all()[0].id);
+    };
+    $("owner").append(e, d);
+  }
+  $("out").innerHTML = "";
+  renderList();
+}
+
+function execute(code, fn, tests) {
+  return new Promise((resolve) => {
+    let w, timer, settled = false;
+    const finish = (r) => { if (settled) return; settled = true; clearTimeout(timer); if (w) w.terminate(); resolve(r); };
+    const inline = () => finish(judge(code, fn, tests)); // fallback if workers are blocked
+    try {
+      w = new Worker(URL.createObjectURL(new Blob([WORKER_SRC], { type: "text/javascript" })));
+      w.onmessage = (e) => finish(e.data);
+      w.onerror = () => { if (!settled) { w.terminate(); w = null; inline(); } };
+      timer = setTimeout(() => finish({ timeout: true }), settings.tl * 1000);
+      w.postMessage({ code, fn, tests });
+    } catch (e) { inline(); }
+  });
+}
+
+async function go(all) {
+  const tests = cur.tests.filter((t) => all || !t[2]).map((t) => ({ input: t[0], expected: t[1], hidden: !!t[2] }));
+  $("run").disabled = $("submit").disabled = true;
+  $("out").textContent = "Running…";
+  const r = await execute($("code").value, cur.fn, tests.map((t) => ({ input: t.input, expected: t.expected })));
+  $("run").disabled = $("submit").disabled = false;
+  let h;
+  if (r.timeout) h = "<div class='v bad'>Time Limit Exceeded</div><div>Your code ran longer than " + settings.tl + " seconds. Check for infinite loops or a slower algorithm.</div>";
+  else if (r.error) h = "<div class='v bad'>Runtime Error</div><div class='case'>" + esc(r.error) + "</div>";
+  else {
+    const n = r.results.filter((x) => x.pass).length, okAll = n === r.results.length;
+    h = "<div class='v " + (okAll ? "ok" : "bad") + "'>" + (okAll ? (all ? "Accepted" : "All sample cases passed") : "Wrong Answer") + "</div>";
+    h += "<div>" + n + " / " + r.results.length + " test cases passed</div>";
+    r.results.forEach((x, i) => {
+      const t = tests[i];
+      h += "<div class='case'><b class='" + (x.pass ? "ok" : "bad") + "'>Case " + (i + 1) + ": " + (x.pass ? "Passed" : "Failed") + "</b>";
+      if (t.hidden) h += " (hidden)";
+      else h += "<br>Input: " + show(t.input) + "<br>Expected: " + show(t.expected) + "<br>Got: " + (x.error ? esc(x.error) : show(x.got));
+      h += "</div>";
+    });
+    if (all && okAll && !solved.includes(cur.id)) { solved.push(cur.id); saveSolved(); renderList(); }
+  }
+  $("out").innerHTML = h;
+}
+$("run").onclick = () => go(false);
+$("submit").onclick = () => go(true);
+$("code").addEventListener("keydown", (e) => {
+  if (e.key === "Tab") { e.preventDefault(); const t = e.target, s = t.selectionStart; t.value = t.value.slice(0, s) + "  " + t.value.slice(t.selectionEnd); t.selectionStart = t.selectionEnd = s + 2; }
+});
+applySettings();
+load(PROBLEMS[0].id);
+</script>
+</body>
+</html>
